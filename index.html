@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Suntory Pepsico Việt Nam</title>
+    <style>
+        table {
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+<h1 style="color: steelblue">----PEPSICO MANAGE----</h1>
+<hr>
+<span style="color: red" id="validate"></span>
+<input type="text" id="sku">
+<button onclick="addSku()">Add</button>
+<input type="text" id="search" oninput="actionSearch()">
+<button onclick="actionSearch()">Search</button>
+<table border="1">
+    <tr>
+        <th>STT</th>
+        <th>SẢN PHẨM</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+
+    </tr>
+
+    <tbody id="drawTable">
+
+    </tbody>
+
+</table>
+</body>
+</html>
+
+<script>
+    let brandList = ['Pepsi','SevenUp','Mirinda']
+    let brandSearch = [];
+    function showListBrand() {
+        let drawTable = '';
+        for (let i = 0; i < brandList.length; i++) {
+            //SỬ DỤNG CỘNG CHUỖI THÔNG THƯỜNG : biding biến qua ++
+            let j = i + 1
+            drawTable += '<tr>'+
+                '<td>' + j + '</td>' +
+                '<td>' + brandList[i] +'</td>' +
+                '<td>' + '<button onClick="editSKU('+i+')">Edit</button>' + '</td>' +
+                '<td>' + '<button onClick="delSKU('+i+')">Delele</button>' + '</td>' +
+                '</tr>'
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
+    }
+    showListBrand();
+
+    //Thêm sản phẩm
+    function addSku() {
+        let newBrand = document.getElementById('sku').value;
+        //Xử lý trường hợp Input rỗng
+        if( newBrand.trim() === '') {
+            document.getElementById('validate').innerHTML = 'The new Brand is required! Please try again!!!'
+            return;
+        } else {
+            brandList.push(newBrand);
+            document.getElementById('validate').innerHTML = '<span style="color: red"> Add Brand Success!!</span>'
+            showListBrand();
+        }
+    }
+
+    //Sửa tên sản phẩm
+    function editSKU(index) {
+        let editSKU = prompt('Sửa tên sản phẩm !!!', brandList[index]);
+        brandList[index] = editSKU;
+        showListBrand();
+    }
+
+    //Xóa tên sản phẩm
+    function delSKU( index) {
+        brandList.splice(index,1);
+        showListBrand()
+    }
+
+    function showListSearch() {
+        let drawTable = '';
+        for (let i = 0; i < brandSearch.length; i++) {
+            //SỬ DỤNG CỘNG CHUỖI THÔNG THƯỜNG : biding biến qua ++
+            let j = i + 1
+            drawTable += '<tr>'+
+                '<td>' + j + '</td>' +
+                '<td>' + brandSearch[i] + '</td>' +
+                '<td>' + '<button onClick="editSKU('+i+')">Edit</button>' + '</td>' +
+                '<td>' + '<button onClick="delSKU('+i+')">Delele</button>' + '</td>' +
+                '</tr>'
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
+    }
+
+    function actionSearch() {
+        brandSearch.splice(0, brandSearch.length)
+        let search = document.getElementById('search').value;
+        let searchTLC = search.toLowerCase();
+        let brandListTLC = [];
+        if (search === '') {
+            showListBrand();
+            return;
+        }
+        for (let i = 0; i < brandList.length; i++) {
+            brandListTLC.push(brandList[i].toLowerCase())
+        }
+        for (let i = 0; i < brandListTLC.length; i++) {
+            if (searchTLC === brandListTLC[i]) {
+                brandSearch.push(brandList[i]);
+            }
+        }
+        showListSearch();
+    }
+</script>
